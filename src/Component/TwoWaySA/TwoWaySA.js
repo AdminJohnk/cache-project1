@@ -4,6 +4,7 @@ import MainMemory from './MainMemory'
 import CacheMemoryLine from './CacheMemoryLine'
 import CacheMemory from './CacheMemory'
 import PAaddress_TwoWay from './PAaddress_TwoWay'
+import styled from 'styled-components';
 // import './TwoWaySA.css'
 
 function getID(id) {
@@ -17,6 +18,178 @@ function isInteger(n) {
    return n % 1 === 0 && n > 0
 }
 
+const StyleTotal = styled.div`
+.maincontent {
+    margin-top: 10px;
+    padding: 0;
+    
+}
+.maincontent .Policies_title{
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 3px;
+}
+.maincontent .Policies_radio{
+    flex-direction: row;
+}
+.name_element {
+    margin-top: 9px;
+    margin-bottom: 0;
+    font-size: 15px;
+}
+.inputtext .form-control:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.08rem rgb(13 110 253 / 25%);
+    /* background-color: #ff5c8dc7; */
+}
+.instruction__select:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.08rem rgb(13 110 253 / 25%);
+}
+.maincontent .aline {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.aline__button button {
+    width: 152px;
+}
+.instruction__title {
+    font-size: 18px;
+}
+.instruction__inputtext {
+    width: 100%;
+}
+.information_text {
+    text-align: center;
+    width: 100%;
+    height: 98px;
+    overflow: auto;
+}
+#information_Configure {
+    text-align: center;
+    width: 100%;
+    height: 98px;
+    overflow: auto;
+}
+.form-control {
+    height: 33px;
+    font-size: 15px;
+}
+.aline__button button {
+    height: 38px;
+}
+hr {
+    margin: 0.7rem 0;
+    background-color: black;
+    height: 2px !important;
+}
+.statistics {
+    font-size: 13px;
+}
+.btn-check:focus + .btn-primary,
+.btn-primary:focus {
+    box-shadow: none !important;
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+}
+.maxcol {
+    padding: 0 15px 0 35px;
+}
+.maxcol__caculator {
+    margin-top: 20px;
+}
+.instruction_breakdown .caption {
+    width: 90%;
+    text-align: center;
+    margin: 0 auto;
+    padding-bottom: 10px;
+}
+.instruction_breakdown .caption .tr_of_thead td {
+    padding: 0;
+    width: 33.33%;
+}
+.instruction_breakdown .caption .tr_of_tbody td {
+    padding: 0;
+    width: 33.33%;
+}
+.instruction_breakdown .caption thead {
+    font-weight: 700;
+}
+.memoryTable {
+    height: 100px;
+    border: 1px solid #000;
+    overflow: auto;
+    display: inline-block;
+    white-space: nowrap;
+    width: 100%;
+}
+.instruction_breakdown_title,
+.memory_block_title,
+.cache_table_title {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+.cache_table .drawtable {
+    width: 90%;
+    margin: auto;
+    border: 1px solid #aaa;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+.cache_table .drawtable td,
+.cache_table .drawtable th {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.drawtable thead {
+    background-color: #aaa;
+}
+.memoryTable .drawtable {
+    width: 100%;
+    font-size: 15px;
+    text-align: center;
+}
+.current_row_close::after {
+    content: "✘";
+    position: absolute;
+    left: 15px;
+    color: red;
+    top: -1px;
+}
+.current_row_tick::after {
+    content: "✓";
+    position: absolute;
+    left: 15px;
+    color: #009624;
+    top: -1px;
+    font-weight: 900;
+}
+.Miss_After::after {
+    content: 'Miss';
+    color: red;
+    position: absolute;
+    left: -56px;
+    top: -1px;
+    font-weight: 700;
+    font-size: 19px;
+}
+.Hit_After::after {
+    content: 'Hit';
+    color: red;
+    position: absolute;
+    left: -56px;
+    top: -1px;
+    font-weight: 700;
+    font-size: 19px;
+    /* color: transparent; */
+}
+
+`;
 
 export default class TwoWaySA extends Component {
    state = {
@@ -819,7 +992,7 @@ export default class TwoWaySA extends Component {
       this.Miss_or_Hit = 'Hit';
 
       return (
-         <div className='container-fluid'>
+         <StyleTotal className='container-fluid'>
             <div className='row maincontent container-fluid'>
                <div className='col-3 mincol'>
                   <div className='replacement_Policies'>
@@ -1003,7 +1176,7 @@ export default class TwoWaySA extends Component {
                   </div>
                </div>
             </div>
-         </div>
+         </StyleTotal>
       )
    }
 }
