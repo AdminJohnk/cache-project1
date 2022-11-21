@@ -3,9 +3,9 @@ import MainMemoryLine from './MainMemoryLine'
 import MainMemory from './MainMemory'
 import CacheMemoryLine from './CacheMemoryLine'
 import CacheMemory from './CacheMemory'
-import PAaddress_TwoWay from './PAaddress_TwoWay'
+import PAaddress_FourWay from './PAaddress_FourWay'
 import styled from 'styled-components';
-// import './TwoWaySA.css'
+
 
 function getID(id) {
    return document.getElementById(id)
@@ -188,10 +188,9 @@ hr {
     font-size: 19px;
     /* color: transparent; */
 }
-
 `;
 
-export default class TwoWaySA extends Component {
+export default class FourWaySA extends Component {
    state = {
       cache_size: 0,
       memory_size: 0,
@@ -243,17 +242,23 @@ export default class TwoWaySA extends Component {
       // Tạo cache memory
       let soDong = this.state.cache_size / Math.pow(2, this.state.offset_bits);
       let array = []; // Mảng chứa các dòng
-      let index = -1;
+      let luu;
+      let index;
+      let stt;
       for (let i = 0; i < soDong; i++) {
-         if (i % 2 === 0) {
-            index++;
+         if (i % 4 === 0) {
+            luu = i;
          }
-         let stt;
-         if (i % 2 === 0) {
+         if(i===(luu+0)){
             stt = 0;
-         } else {
+         } else if (i===(luu+1)){
             stt = 1;
+         } else if (i===(luu+2)){
+            stt = 2;
+         } else if (i===(luu+3)){
+            stt = 3;
          }
+         index = Math.floor(i / 4);
          let cacheMemoryLine = new CacheMemoryLine(index, 0, 0, '-', 0, stt);
          array.push(cacheMemoryLine);
       }
@@ -352,7 +357,7 @@ export default class TwoWaySA extends Component {
 
       let PAaddress = log2(Memory_size);
       let BlockOfSet = Math.pow(2, Offset_bits);
-      let SetIndex = log2(Cache_size / BlockOfSet / 2);
+      let SetIndex = log2(Cache_size / BlockOfSet / 4);
       let Tagbit = PAaddress - Offset_bits - SetIndex;
 
       // Disable các input
@@ -383,7 +388,7 @@ export default class TwoWaySA extends Component {
 
       getID('information_text').innerHTML =
          `Offset = ${Offset_bits} bits<br />
-        Set Index = log<sub>2</sub>(${Cache_size}/${BlockOfSet}/2) = ${SetIndex} bits<br />
+        Set Index = log<sub>2</sub>(${Cache_size}/${BlockOfSet}/4) = ${SetIndex} bits<br />
         Physical Address = log<sub>2</sub>(${Memory_size}) = ${PAaddress} bits<br />
         Tag = ${PAaddress} bits - ${Offset_bits} bits - ${SetIndex} bits = ${Tagbit} bits<br />
         Block = ${Tagbit} bits + ${SetIndex} bits = ${Tagbit + SetIndex} bits<br /><br />
@@ -425,7 +430,15 @@ export default class TwoWaySA extends Component {
          binary = temp + binary;
       }
 
-      this.PA_address = new PAaddress_TwoWay(binary.slice(0, this.tag_bit), binary.slice(this.tag_bit, this.tag_bit + this.set_index), binary.slice(this.tag_bit + this.set_index, binary.length));
+      if(binary.slice(this.tag_bit, this.tag_bit + this.set_index)===''){
+         this.PA_address = new PAaddress_FourWay(binary.slice(0, this.tag_bit), 0, binary.slice(this.tag_bit + this.set_index, binary.length));
+      } else {
+         this.PA_address = new PAaddress_FourWay(binary.slice(0, this.tag_bit), binary.slice(this.tag_bit, this.tag_bit + this.set_index), binary.slice(this.tag_bit + this.set_index, binary.length));
+      }
+
+      
+
+      
 
       // Thể hiện lên màn hình
       getID('caption__tag').innerHTML = this.PA_address.tag;
@@ -637,10 +650,14 @@ export default class TwoWaySA extends Component {
 
 
                   for (var i of current_set) {
-                     if (i.id === '1') {
+                     if (i.id === '0') {
+                        i.id = '3';
+                     } else if (i.id === '1') {
                         i.id = '0';
-                     } else {
+                     } else if (i.id === '2') {
                         i.id = '1';
+                     } else if (i.id === '3') {
+                        i.id = '2';
                      }
                   }
                }
@@ -675,10 +692,14 @@ export default class TwoWaySA extends Component {
 
                   for (var i of this.cacheMemory.Array) {
                      if (i.index === data_) {
-                        if (i.stt === 1) {
+                        if (i.stt === 0) {
+                           i.stt = 3;
+                        } else if (i.stt === 1) {
                            i.stt = 0;
-                        } else {
+                        } else if (i.stt === 2) {
                            i.stt = 1;
+                        } else if (i.stt === 3) {
+                           i.stt = 2;
                         }
                      }
                   }
@@ -865,10 +886,14 @@ export default class TwoWaySA extends Component {
 
 
                for (var i of current_set) {
-                  if (i.id === '1') {
+                  if (i.id === '0') {
+                     i.id = '3';
+                  } else if (i.id === '1') {
                      i.id = '0';
-                  } else {
+                  } else if (i.id === '2') {
                      i.id = '1';
+                  } else if (i.id === '3') {
+                     i.id = '2';
                   }
                }
             }
@@ -901,10 +926,14 @@ export default class TwoWaySA extends Component {
 
                for (var i of this.cacheMemory.Array) {
                   if (i.index === data_) {
-                     if (i.stt === 1) {
+                     if (i.stt === 0) {
+                        i.stt = 3;
+                     } else if (i.stt === 1) {
                         i.stt = 0;
-                     } else {
+                     } else if (i.stt === 2) {
                         i.stt = 1;
+                     } else if (i.stt === 3) {
+                        i.stt = 2;
                      }
                   }
                }
@@ -982,7 +1011,7 @@ export default class TwoWaySA extends Component {
 
    render() {
       let PA = log2(this.state.memory_size);
-      this.set_index = log2(this.state.cache_size / Math.pow(2, this.state.offset_bits) / 2);
+      this.set_index = log2(this.state.cache_size / Math.pow(2, this.state.offset_bits) / 4);
       this.tag_bit = PA - this.state.offset_bits - this.set_index;
 
       this.createMainMemory();
@@ -1120,7 +1149,7 @@ export default class TwoWaySA extends Component {
                <div className='col-9 maxcol'>
                   <div className='header'>
                      <h3 style={{ textAlign: "center" }}><i class="fa fa-sliders-h"></i>
-                        <font face="titleFont"> 2-WAY SET ASSOCIATIVE CACHE </font>
+                        <font face="titleFont"> 4-WAY SET ASSOCIATIVE CACHE </font>
                      </h3>
                   </div>
                   <div className='row maxcol__caculator'>

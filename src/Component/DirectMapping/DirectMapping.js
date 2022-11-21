@@ -708,7 +708,9 @@ export default class DirectMapping extends Component {
                                  valid.innerHTML = this.cacheMemory.Array[this.cacheMemory.currentIndex].valid;
                                  data.innerHTML = datacurrent;
 
-                                 getID(`memory_block_row${decimo_string}`).scrollIntoView();
+                                 setTimeout(() => {
+                                    getID(`memory_block_row${decimo_string}`).scrollIntoView();
+                                 }, 2);
                                  getID(`memory_block_row${decimo_string}`).style.backgroundColor = '#29b5f6a8';
 
 
@@ -838,7 +840,7 @@ export default class DirectMapping extends Component {
 
                               setTimeout(() => {
                                  getID(`memory_block_row${decimo_string}`).scrollIntoView();
-                              }, 1);
+                              }, 2);
 
                               // Lấy dữ liệu trong bộ nhớ chính ra
                               let buffer = this.mainMemory.Array.find(item => item.index === decimo_string).buffer;

@@ -542,7 +542,9 @@ export default class AssociativeMapping extends Component {
          }
          let id = parseInt(this.PA_address.tag, 2);
          id = 'memory_block_row' + id;
-         getID(id).scrollIntoView();
+         setTimeout(() => {
+            getID(id).scrollIntoView();
+         }, 2);
          getID(id).style.backgroundColor = '#29b5f6a8';
          getID('caption__tag').style.backgroundColor = '#29b5f6a8';
          getID('information_text').style.backgroundColor = '#29b5f6a8';
@@ -758,7 +760,7 @@ export default class AssociativeMapping extends Component {
       getID(id).style.backgroundColor = 'transparent';
       setTimeout(() => {
          getID(id).scrollIntoView();
-      }, 1);
+      }, 2);
 
       // Kiểm tra miss or hit
       let check = this.cacheMemory.missOrHit(this.PA_address.tag);
