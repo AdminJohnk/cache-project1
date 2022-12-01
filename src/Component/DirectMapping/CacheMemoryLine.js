@@ -1,4 +1,4 @@
-// Tạo ra class CacheMemoryLine kế thừa lớp MemoryLine và bổ sung thêm 2 thuộc tính valid và tagbit
+// Tạo ra class CacheMemoryLine kế thừa lớp MemoryLine và bổ sung thêm  thuộc tính valid, tagbit và dirtybit
 import MemoryLine from './MemoryLine';
 
 export default class CacheMemoryLine extends MemoryLine {
@@ -9,3 +9,6 @@ export default class CacheMemoryLine extends MemoryLine {
         this.DirtyBit = DirtyBit;
     }
 }
+
+
+

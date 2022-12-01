@@ -5,9 +5,9 @@ export default class CacheMemory {
         this.currentIndex = currentIndex;
 
         // Khai báo 2 phương thức missOrHit và getData.
-        this.missOrHit = function (data_compare, set_index) {
+        this.missOrHit = function (data_compare) {
             for ( let item of this.Array) {
-                if(item.index===set_index && item.tagbit===data_compare) {
+                if(item.tagbit===data_compare) {
                     return true;
                 }
             }

@@ -249,13 +249,13 @@ export default class FourWaySA extends Component {
          if (i % 4 === 0) {
             luu = i;
          }
-         if(i===(luu+0)){
+         if (i === (luu + 0)) {
             stt = 0;
-         } else if (i===(luu+1)){
+         } else if (i === (luu + 1)) {
             stt = 1;
-         } else if (i===(luu+2)){
+         } else if (i === (luu + 2)) {
             stt = 2;
-         } else if (i===(luu+3)){
+         } else if (i === (luu + 3)) {
             stt = 3;
          }
          index = Math.floor(i / 4);
@@ -430,15 +430,15 @@ export default class FourWaySA extends Component {
          binary = temp + binary;
       }
 
-      if(binary.slice(this.tag_bit, this.tag_bit + this.set_index)===''){
+      if (binary.slice(this.tag_bit, this.tag_bit + this.set_index) === '') {
          this.PA_address = new PAaddress_FourWay(binary.slice(0, this.tag_bit), 0, binary.slice(this.tag_bit + this.set_index, binary.length));
       } else {
          this.PA_address = new PAaddress_FourWay(binary.slice(0, this.tag_bit), binary.slice(this.tag_bit, this.tag_bit + this.set_index), binary.slice(this.tag_bit + this.set_index, binary.length));
       }
 
-      
 
-      
+
+
 
       // Thể hiện lên màn hình
       getID('caption__tag').innerHTML = this.PA_address.tag;
@@ -592,9 +592,15 @@ export default class FourWaySA extends Component {
                }
             }
          }
+         let id;
+         if (this.set_index === 0) {
+            id = parseInt(this.PA_address.tag, 2);
+         } else {
+            id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
+         }
 
-         let id = parseInt(this.PA_address.tag, 2);
          id = 'memory_block_row' + id;
+         console.log(id);
          setTimeout(() => {
             getID(id).scrollIntoView();
          }, 2);
@@ -610,7 +616,12 @@ export default class FourWaySA extends Component {
             // Thay đổi theo chính sách
             if (this.policy === 'FIFO') {
                // Lấy dữ liệu trong bộ nhớ chính ra
-               let id = parseInt(this.PA_address.tag, 2);
+               let id;
+               if (this.set_index === 0) {
+                  id = parseInt(this.PA_address.tag, 2);
+               } else {
+                  id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
+               }
                let buffer = this.mainMemory.Array.find(item => item.index === id).buffer;
                let data = '';
                for (var item of buffer) {
@@ -723,7 +734,12 @@ export default class FourWaySA extends Component {
          return;
       }
       if (this.soLanNext === 4) {
-         let id = parseInt(this.PA_address.tag, 2);
+         let id;
+         if (this.set_index === 0) {
+            id = parseInt(this.PA_address.tag, 2);
+         } else {
+            id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
+         }
          id = 'memory_block_row' + id;
          getID(id).style.backgroundColor = 'transparent';
 
@@ -832,7 +848,12 @@ export default class FourWaySA extends Component {
       }
 
       // Đổi màu Memory Block
-      let id = parseInt(this.PA_address.tag, 2);
+      let id;
+      if (this.set_index === 0) {
+         id = parseInt(this.PA_address.tag, 2);
+      } else {
+         id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
+      }
       id = 'memory_block_row' + id;
       getID(id).style.backgroundColor = 'transparent';
       setTimeout(() => {
@@ -846,7 +867,12 @@ export default class FourWaySA extends Component {
          this.Miss_or_Hit = 'Miss';
          if (this.policy === 'FIFO') {
             // Lấy dữ liệu trong bộ nhớ chính ra
-            let id = parseInt(this.PA_address.tag, 2);
+            let id;
+            if (this.set_index === 0) {
+               id = parseInt(this.PA_address.tag, 2);
+            } else {
+               id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
+            }
             let buffer = this.mainMemory.Array.find(item => item.index === id).buffer;
             let data = '';
             for (var item of buffer) {

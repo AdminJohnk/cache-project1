@@ -580,7 +580,7 @@ export default class TwoWaySA extends Component {
             }
          }
 
-         let id = parseInt(this.PA_address.tag, 2);
+         let id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
          id = 'memory_block_row' + id;
          setTimeout(() => {
             getID(id).scrollIntoView();
@@ -597,7 +597,7 @@ export default class TwoWaySA extends Component {
             // Thay đổi theo chính sách
             if (this.policy === 'FIFO') {
                // Lấy dữ liệu trong bộ nhớ chính ra
-               let id = parseInt(this.PA_address.tag, 2);
+               let id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
                let buffer = this.mainMemory.Array.find(item => item.index === id).buffer;
                let data = '';
                for (var item of buffer) {
@@ -702,7 +702,7 @@ export default class TwoWaySA extends Component {
          return;
       }
       if (this.soLanNext === 4) {
-         let id = parseInt(this.PA_address.tag, 2);
+         let id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
          id = 'memory_block_row' + id;
          getID(id).style.backgroundColor = 'transparent';
 
@@ -811,7 +811,7 @@ export default class TwoWaySA extends Component {
       }
 
       // Đổi màu Memory Block
-      let id = parseInt(this.PA_address.tag, 2);
+      let id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
       id = 'memory_block_row' + id;
       getID(id).style.backgroundColor = 'transparent';
       setTimeout(() => {
@@ -825,7 +825,7 @@ export default class TwoWaySA extends Component {
          this.Miss_or_Hit = 'Miss';
          if (this.policy === 'FIFO') {
             // Lấy dữ liệu trong bộ nhớ chính ra
-            let id = parseInt(this.PA_address.tag, 2);
+            let id = parseInt(this.PA_address.tag + this.PA_address.index, 2);
             let buffer = this.mainMemory.Array.find(item => item.index === id).buffer;
             let data = '';
             for (var item of buffer) {
