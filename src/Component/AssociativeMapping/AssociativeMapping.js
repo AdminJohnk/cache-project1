@@ -336,6 +336,10 @@ export default class AssociativeMapping extends Component {
       if (!this.checkValidInput(Cache_size, Memory_size, Offset_bits)) {
          return;
       }
+      if(Number(Memory_size)>4096){
+         alert('Memory size must be less than 4096');
+         return;
+      }
 
       let PAaddress1 = log2(Memory_size);
       let Tagbit = PAaddress1 - Offset_bits;

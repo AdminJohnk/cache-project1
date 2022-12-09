@@ -354,6 +354,10 @@ export default class FourWaySA extends Component {
       if (!this.checkValidInput(Cache_size, Memory_size, Offset_bits)) {
          return;
       }
+      if(Number(Memory_size)>4096){
+         alert('Memory size must be less than 4096');
+         return;
+      }
 
       let PAaddress = log2(Memory_size);
       let BlockOfSet = Math.pow(2, Offset_bits);

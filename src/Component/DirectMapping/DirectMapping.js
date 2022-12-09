@@ -396,6 +396,10 @@ export default class DirectMapping extends Component {
       if (!this.checkValidInput(Cache_size, Memory_size, Offset_bits)) {
          return;
       }
+      if (Number(Memory_size) > 4096) {
+         alert('Memory size must be less than 4096');
+         return;
+      }
 
       let cache_index1 = log2(Cache_size / Math.pow(2, Offset_bits));
       let PAaddress1 = log2(Memory_size);
@@ -817,7 +821,6 @@ export default class DirectMapping extends Component {
                                  alert('Please submit Instruction.');
                                  return;
                               }
-                              Miss_or_Hit = this.cacheMemory.missOrHit(getID('caption__tag').innerHTML);
                               // Lấy dòng trùng với cache index đang chọn trên giao diện
                               let data_ = this.PA_address.index;
                               data_ = Number(data_).toString(10).toString(2);
@@ -826,6 +829,10 @@ export default class DirectMapping extends Component {
                               // Đánh dấu dòng nào đang chọn trong bộ nhớ cache_
                               let decimal = Number(parseInt(data_, 2));
                               this.cacheMemory.currentIndex = decimal;
+
+                              Miss_or_Hit = this.cacheMemory.missOrHit(getID('caption__tag').innerHTML);
+                              console.log(getID('caption__tag').innerHTML);
+                              console.log(this.cacheMemory.Array);
 
                               // 4 cột trong cache table
                               let valid = current_row.querySelector('#Valid');
@@ -940,8 +947,6 @@ export default class DirectMapping extends Component {
                               // Information
                               getID('information_text').innerHTML = 'The cycle has been completed.Please submit another instructions';
                               getID('information_text').style.backgroundColor = 'transparent';
-
-                              console.log(this.cacheMemory.Array);
 
                               Miss_or_Hit = true;
                               return;

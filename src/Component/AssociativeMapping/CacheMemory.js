@@ -13,8 +13,5 @@ export default class CacheMemory {
             }
             return false;
         }
-        this.getData = function () {
-            return this.Array;
-        }
     }
 }
