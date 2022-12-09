@@ -109,7 +109,7 @@ hr {
     font-weight: 700;
 }
 .memoryTable {
-    height: 100px;
+    height: 300px;
     border: 1px solid #000;
     overflow: auto;
     display: inline-block;
@@ -243,6 +243,7 @@ export default class DirectMapping extends Component {
       let arr = [];
       for (let i = 0; i < soDong; i++) {
          let arr1 = [];
+         arr1.push(<td id={'memory_block_row_number' + i}>{i}</td>);
          for (let j = 0; j < soCot; j++) {
             arr1.push(<td id={'memory_block_col' + j}>{this.mainMemory.Array[i].buffer[j]}</td>);
          }
@@ -346,7 +347,8 @@ export default class DirectMapping extends Component {
                anychar = String.fromCharCode(Math.floor(Math.random() * 62) + 65);
             } while (anychar === ' ' || anychar === '\n' || anychar === '\t');
 
-            buffer.push(`B. ${i} - ${anychar}`);
+            let hex = anychar.charCodeAt(0).toString(16).toUpperCase();
+            buffer.push(`0x${hex}`);
          }
          let mainMemoryLine = new MainMemoryLine(i, buffer);
          array.push(mainMemoryLine);
@@ -698,9 +700,10 @@ export default class DirectMapping extends Component {
                                  let buffer = this.mainMemory.Array.find(item => item.index === decimo_string).buffer;
                                  let datacurrent = '';
                                  for (var item of buffer) {
-                                    // Lấy ký tự cuối cùng của item công vào datacurrent
-                                    datacurrent += item[item.length - 1];
+                                    // Lấy ký tự cuối cùng của item công vạo data
+                                    datacurrent += item + ', ';
                                  }
+                                 datacurrent = datacurrent.slice(0, datacurrent.length - 2);
 
                                  // Set cho cachememory
                                  this.cacheMemory.Array[this.cacheMemory.currentIndex].valid = 1;
@@ -853,10 +856,10 @@ export default class DirectMapping extends Component {
                               let buffer = this.mainMemory.Array.find(item => item.index === decimo_string).buffer;
                               let datacurrent = '';
                               for (var item of buffer) {
-                                 // Lấy ký tự cuối cùng của item công vào datacurrent
-                                 datacurrent += item[item.length - 1];
+                                 // Lấy ký tự cuối cùng của item công vạo data
+                                 datacurrent += item + ', ';
                               }
-
+                              datacurrent = datacurrent.slice(0, datacurrent.length - 2);
                               // Set cho cachememory
                               this.cacheMemory.Array[this.cacheMemory.currentIndex].valid = 1;
                               this.cacheMemory.Array[this.cacheMemory.currentIndex].tagbit = getID('caption__tag').innerHTML;

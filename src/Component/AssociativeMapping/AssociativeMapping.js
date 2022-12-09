@@ -117,7 +117,7 @@ hr {
     font-weight: 700;
 }
 .memoryTable {
-    height: 100px;
+    height: 300px;
     border: 1px solid #000;
     overflow: auto;
     display: inline-block;
@@ -229,7 +229,8 @@ export default class AssociativeMapping extends Component {
                anychar = String.fromCharCode(Math.floor(Math.random() * 62) + 65);
             } while (anychar === ' ' || anychar === '\n' || anychar === '\t');
 
-            buffer.push(`B. ${i} - ${anychar}`);
+            let hex = anychar.charCodeAt(0).toString(16).toUpperCase();
+            buffer.push(`0x${hex}`);
          }
          let mainMemoryLine = new MainMemoryLine(i, buffer);
          array.push(mainMemoryLine);
@@ -276,6 +277,7 @@ export default class AssociativeMapping extends Component {
       let arr = [];
       for (let i = 0; i < soDong; i++) {
          let arr1 = [];
+         arr1.push(<td id={'memory_block_row_number' + i}>{i}</td>);
          for (let j = 0; j < soCot; j++) {
             arr1.push(<td id={'memory_block_col' + j}>{this.mainMemory.Array[i].buffer[j]}</td>);
          }
@@ -566,8 +568,9 @@ export default class AssociativeMapping extends Component {
                let data = '';
                for (var item of buffer) {
                   // Lấy ký tự cuối cùng của item công vạo data
-                  data += item[item.length - 1];
+                  data += item + ', ';
                }
+               data = data.slice(0, data.length - 2);
 
                // Set cho giao diện
                // Kiểm tra xem Miss có full dòng ko
@@ -777,8 +780,9 @@ export default class AssociativeMapping extends Component {
             let data = '';
             for (var item of buffer) {
                // Lấy ký tự cuối cùng của item công vạo data
-               data += item[item.length - 1];
+               data += item + ', ';
             }
+            data = data.slice(0, data.length - 2);
             // Set cho giao diện
             // Kiểm tra xem Miss có full dòng ko
             // false = full, true = có -
