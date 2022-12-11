@@ -108,6 +108,23 @@ hr {
 .instruction_breakdown .caption thead {
     font-weight: 700;
 }
+#instruction__data__div{
+   width: 100%;
+   border: 1px solid #ced4da;
+   border-radius: .25rem;
+   height: 33px;
+   font-size: 15px;
+   display: none;
+   padding: .375rem .75rem;
+   font-weight: 400;
+   line-height: 1.5;
+   color: #212529;
+   background-color: #fff;
+   margin-top: 10px;
+   background-clip: padding-box;
+   appearance: none;
+   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
 .memoryTable {
     height: 300px;
     border: 1px solid #000;
@@ -197,6 +214,8 @@ export default class DirectMapping extends Component {
 
    mainMemory;
    cacheMemory;
+   numberOfAddress;
+   memoryCell;
 
    miss = 0;
    hit = 0;
@@ -279,9 +298,17 @@ export default class DirectMapping extends Component {
    }
    random_Detail = (start, end, number) => {
       let data = '';
+      let spanInput = '';
       for (let i = 0; i < 10; i++) {
          let hexa = (Math.floor(Math.random() * (end + 0x1 - start)) + start).toString(16);
          data += hexa + ',';
+
+         // Chỉnh cho thẻ div
+         if (i !== 9) {
+            spanInput += `<span id="address${i}">${hexa + ','}</span>`;
+         } else {
+            spanInput += `<span id="address${i}">${hexa}</span>`;
+         }
       }
       data = data.slice(0, data.length - 1);
 
@@ -290,6 +317,13 @@ export default class DirectMapping extends Component {
       data = data.slice(number + 1, data.length);
       getID('instruction__input').value = take;
       getID('instruction__data').value = data;
+
+      // Chỉnh cho thẻ div
+      this.numberOfAddress = -1;
+      spanInput = spanInput.slice(0, spanInput.length - 1);
+      getID('instruction__data__div').innerHTML = spanInput;
+      getID('instruction__data').style.display = 'none';
+      getID('instruction__data__div').style.display = 'block';
    }
    randomData = () => {
       // Khi đã chưa nhấn submit1 thì không cho random
@@ -555,6 +589,7 @@ export default class DirectMapping extends Component {
                      </div>
                      <div className='instruction__inputtext inputtext mt-2'>
                         <input id='instruction__data' type="text" className="form-control" placeholder="List of next 10 Instructions" />
+                        <div id='instruction__data__div'></div>
                      </div>
                      <div className='row aline__button mt-2'>
                         <div className='col-6'>
@@ -705,6 +740,9 @@ export default class DirectMapping extends Component {
                                  }
                                  datacurrent = datacurrent.slice(0, datacurrent.length - 2);
 
+                                 let vitri = parseInt(this.PA_address.offset, 2);
+                                 this.memoryCell = datacurrent.split(', ')[vitri];
+
                                  // Set cho cachememory
                                  this.cacheMemory.Array[this.cacheMemory.currentIndex].valid = 1;
                                  this.cacheMemory.Array[this.cacheMemory.currentIndex].tagbit = getID('caption__tag').innerHTML;
@@ -773,8 +811,16 @@ export default class DirectMapping extends Component {
 
                                  }
 
-                                 input_string.focus();
+                                 // Chỉnh cho thẻ div
+                                 this.numberOfAddress++;
+                                 getID('address' + this.numberOfAddress).style.color = '#afa9a9';
+                                 if (this.numberOfAddress === 9) {
+                                    this.numberOfAddress = -1;
+                                    getID('instruction__data').style.display = 'block';
+                                    getID('instruction__data__div').style.display = 'none';
+                                 }
 
+                                 input_string.focus();
                                  this.submit_part2 = 'chuanhan';
                                  getID('submit_part2').disabled = false;
 
@@ -801,7 +847,7 @@ export default class DirectMapping extends Component {
 
                                  getID('Status_Miss_hit').innerHTML += `
                       <li>
-                      Load ${previous_input.toString().toUpperCase()} [${x}]
+                      Load ${previous_input.toString().toUpperCase()} (${this.memoryCell}) [${x}]
                       </li>
                       `;
 
@@ -860,6 +906,12 @@ export default class DirectMapping extends Component {
                                  datacurrent += item + ', ';
                               }
                               datacurrent = datacurrent.slice(0, datacurrent.length - 2);
+
+                              let vitri = parseInt(this.PA_address.offset, 2);
+                              console.log(this.PA_address.offset);
+                              console.log(vitri);
+                              this.memoryCell = datacurrent.split(', ')[vitri];
+
                               // Set cho cachememory
                               this.cacheMemory.Array[this.cacheMemory.currentIndex].valid = 1;
                               this.cacheMemory.Array[this.cacheMemory.currentIndex].tagbit = getID('caption__tag').innerHTML;
@@ -914,9 +966,16 @@ export default class DirectMapping extends Component {
                                  data_string.value = data_string.value.slice(vt + 1);
 
                               }
+                              // Chỉnh cho thẻ div
+                              this.numberOfAddress++;
+                              getID('address' + this.numberOfAddress).style.color = '#afa9a9';
+                              if (this.numberOfAddress === 9) {
+                                 this.numberOfAddress = -1;
+                                 getID('instruction__data').style.display = 'block';
+                                 getID('instruction__data__div').style.display = 'none';
+                              }
 
                               input_string.focus();
-
                               this.submit_part2 = 'chuanhan';
                               getID('submit_part2').disabled = false;
 
@@ -941,7 +1000,7 @@ export default class DirectMapping extends Component {
                                  x = 'Hit';
                               }
 
-                              getID('Status_Miss_hit').innerHTML += `<li>Load ${previous_input.toString().toUpperCase()} [${x}]</li>`;
+                              getID('Status_Miss_hit').innerHTML += `<li>Load ${previous_input.toString().toUpperCase()} (${this.memoryCell}) [${x}]</li>`;
 
                               // Tô màu tỷ lệ miss/hit
                               let color = document.getElementsByClassName('statistics')[0];

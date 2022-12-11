@@ -117,6 +117,23 @@ hr {
 .instruction_breakdown .caption thead {
     font-weight: 700;
 }
+#instruction__data__div{
+   width: 100%;
+   border: 1px solid #ced4da;
+   border-radius: .25rem;
+   height: 33px;
+   font-size: 15px;
+   display: none;
+   padding: .375rem .75rem;
+   font-weight: 400;
+   line-height: 1.5;
+   color: #212529;
+   background-color: #fff;
+   margin-top: 10px;
+   background-clip: padding-box;
+   appearance: none;
+   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
 .memoryTable {
     height: 300px;
     border: 1px solid #000;
@@ -212,6 +229,8 @@ export default class TwoWaySA extends Component {
    soLanNext;
    Miss_or_Hit;
    policy;
+   numberOfAddress;
+   memoryCell;
 
    miss = 0;
    hit = 0;
@@ -351,7 +370,7 @@ export default class TwoWaySA extends Component {
       if (!this.checkValidInput(Cache_size, Memory_size, Offset_bits)) {
          return;
       }
-      if(Number(Memory_size)>4096){
+      if (Number(Memory_size) > 4096) {
          alert('Memory size must be less than 4096');
          return;
       }
@@ -448,9 +467,17 @@ export default class TwoWaySA extends Component {
    }
    random_Detail = (start, end, number) => {
       let data = '';
+      let spanInput = '';
       for (let i = 0; i < 10; i++) {
          let hexa = (Math.floor(Math.random() * (end + 0x1 - start)) + start).toString(16);
          data += hexa + ',';
+
+         // Chỉnh cho thẻ div
+         if (i !== 9) {
+            spanInput += `<span id="address${i}">${hexa + ','}</span>`;
+         } else {
+            spanInput += `<span id="address${i}">${hexa}</span>`;
+         }
       }
       data = data.slice(0, data.length - 1);
 
@@ -459,6 +486,13 @@ export default class TwoWaySA extends Component {
       data = data.slice(number + 1, data.length);
       getID('instruction__input').value = take;
       getID('instruction__data').value = data;
+
+      // Chỉnh cho thẻ div
+      this.numberOfAddress = -1;
+      spanInput = spanInput.slice(0, spanInput.length - 1);
+      getID('instruction__data__div').innerHTML = spanInput;
+      getID('instruction__data').style.display = 'none';
+      getID('instruction__data__div').style.display = 'block';
    }
    randomData = () => {
       // Khi đã chưa nhấn submit1 thì không cho random
@@ -612,6 +646,9 @@ export default class TwoWaySA extends Component {
                }
                data = data.slice(0, data.length - 2);
 
+               let vitri = parseInt(this.PA_address.offset, 2);
+               this.memoryCell = data.split(', ')[vitri];
+
                // Set cho giao diện
                // Kiểm tra xem Miss có full dòng ko
                // false = full, true = có -
@@ -748,6 +785,14 @@ export default class TwoWaySA extends Component {
             data_string.value = data_string.value.slice(vt + 1);
 
          }
+         // Chỉnh cho thẻ div
+         this.numberOfAddress++;
+         getID('address' + this.numberOfAddress).style.color = '#afa9a9';
+         if (this.numberOfAddress === 9) {
+            this.numberOfAddress = -1;
+            getID('instruction__data').style.display = 'block';
+            getID('instruction__data__div').style.display = 'none';
+         }
 
          input_string.focus();
 
@@ -773,7 +818,7 @@ export default class TwoWaySA extends Component {
             x = 'Hit';
          }
 
-         getID('Status_Miss_hit').innerHTML += `<li>Load ${previous_input.toString().toUpperCase()} [${x}]</li>`;
+         getID('Status_Miss_hit').innerHTML += `<li>Load ${previous_input.toString().toUpperCase()} (${this,this.memoryCell}) [${x}]</li>`;
 
          // Tô màu tỷ lệ miss/hit
          let color = document.getElementsByClassName('statistics')[0];
@@ -840,6 +885,9 @@ export default class TwoWaySA extends Component {
                data += item + ', ';
             }
             data = data.slice(0, data.length - 2);
+
+            let vitri = parseInt(this.PA_address.offset, 2);
+               this.memoryCell = data.split(', ')[vitri];
 
             // Set cho giao diện
             // Kiểm tra xem Miss có full dòng ko
@@ -947,9 +995,16 @@ export default class TwoWaySA extends Component {
          data_string.value = data_string.value.slice(vt + 1);
 
       }
+      // Chỉnh cho thẻ div
+      this.numberOfAddress++;
+      getID('address' + this.numberOfAddress).style.color = '#afa9a9';
+      if (this.numberOfAddress === 9) {
+         this.numberOfAddress = -1;
+         getID('instruction__data').style.display = 'block';
+         getID('instruction__data__div').style.display = 'none';
+      }
 
       input_string.focus();
-
       this.submit_part2 = 'chuanhan';
       getID('submit_part2').disabled = false;
 
@@ -972,7 +1027,7 @@ export default class TwoWaySA extends Component {
          x = 'Hit';
       }
 
-      getID('Status_Miss_hit').innerHTML += `<li>Load ${previous_input.toString().toUpperCase()} [${x}]</li>`;
+      getID('Status_Miss_hit').innerHTML += `<li>Load ${previous_input.toString().toUpperCase()} (${this,this.memoryCell}) [${x}]</li>`;
 
       // Tô màu tỷ lệ miss/hit
       let color = document.getElementsByClassName('statistics')[0];
@@ -1078,6 +1133,7 @@ export default class TwoWaySA extends Component {
                      </div>
                      <div className='instruction__inputtext inputtext mt-2'>
                         <input id='instruction__data' type="text" className="form-control" placeholder="List of next 10 Instructions" />
+                        <div id='instruction__data__div'></div>
                      </div>
                      <div className='row aline__button mt-2'>
                         <div className='col-6'>
